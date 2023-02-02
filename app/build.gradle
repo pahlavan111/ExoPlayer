@@ -37,6 +37,7 @@ android {
     }
 }
 
+def mediaVersion = "1.0.0-alpha03"
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -48,5 +49,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     //exoplayer
-
+    implementation "androidx.media3:media3-exoplayer:$mediaVersion"
+    implementation "androidx.media3:media3-ui:$mediaVersion"
+    implementation "androidx.media3:media3-exoplayer-dash:$mediaVersion"
 }
