@@ -32,8 +32,13 @@ class MainActivity : AppCompatActivity() {
             .also { exoPlayer ->
                 binding.playerView.player = exoPlayer
 
+                val secondMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3))
+                exoPlayer.addMediaItem(secondMediaItem)
+                val secondMediaItem1 = MediaItem.fromUri(getString(R.string.media_url_mp3_1))
+                exoPlayer.addMediaItem(secondMediaItem1)
                 val mediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3_2))
-                exoPlayer.setMediaItem(mediaItem)
+                exoPlayer.addMediaItem(mediaItem)
+
                 exoPlayer.playWhenReady = playWhenReady
                 exoPlayer.seekTo(currentItem, playBackPosition)
                 exoPlayer.prepare()
