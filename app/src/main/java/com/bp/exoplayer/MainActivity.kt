@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import com.bp.exoplayer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -27,17 +28,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initialExoPlayer() {
+
+        val trackSelector = DefaultTrackSelector(this).apply {
+            setParameters(buildUponParameters().setMaxVideoSizeSd())
+        }
+
         exoPlayer = ExoPlayer.Builder(this)
+            .setTrackSelector(trackSelector)
             .build()
             .also { exoPlayer ->
                 binding.playerView.player = exoPlayer
 
-                val secondMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3))
-                exoPlayer.addMediaItem(secondMediaItem)
-                val secondMediaItem1 = MediaItem.fromUri(getString(R.string.media_url_mp3_1))
-                exoPlayer.addMediaItem(secondMediaItem1)
-                val mediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3_2))
+                val mediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3))
                 exoPlayer.addMediaItem(mediaItem)
+                val secondMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3_1))
+                exoPlayer.addMediaItem(secondMediaItem)
+                val thirdMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3_2))
+                exoPlayer.addMediaItem(thirdMediaItem)
 
                 exoPlayer.playWhenReady = playWhenReady
                 exoPlayer.seekTo(currentItem, playBackPosition)
