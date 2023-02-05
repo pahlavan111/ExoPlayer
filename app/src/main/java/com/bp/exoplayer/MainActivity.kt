@@ -1,16 +1,20 @@
 package com.bp.exoplayer
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
+import androidx.media3.common.Player
 import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import com.bp.exoplayer.databinding.ActivityMainBinding
+
+private const val TAG = "PlayerActivity"
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     private var playWhenReady = true
     private var currentItem = 0
     private var playBackPosition = 0L
+
+    private val playBackStateListener : Player.Listener = playBackStateListener()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +62,7 @@ class MainActivity : AppCompatActivity() {
 
                 exoPlayer.playWhenReady = playWhenReady
                 exoPlayer.seekTo(currentItem, playBackPosition)
+                exoPlayer.addListener(playBackStateListener)
                 exoPlayer.prepare()
             }
     }
@@ -103,8 +110,24 @@ class MainActivity : AppCompatActivity() {
             playBackPosition = it.currentPosition
             currentItem = it.currentMediaItemIndex
             playWhenReady = it.playWhenReady
+            it.removeListener(playBackStateListener)
             it.release()
         }
         exoPlayer = null
+    }
+
+    private fun playBackStateListener() = object : Player.Listener {
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            super.onPlaybackStateChanged(playbackState)
+
+            val stateString: String = when (playbackState) {
+                ExoPlayer.STATE_IDLE -> "ExoPlayer.STATE_IDLE"
+                ExoPlayer.STATE_BUFFERING -> "ExoPlayer.STATE_BUFFERING"
+                ExoPlayer.STATE_READY -> "ExoPlayer.STATE_READY"
+                ExoPlayer.STATE_ENDED -> "ExoPlayer.STATE_ENDED"
+                else -> "UNKNOWN_STATE"
+            }
+            Log.d(TAG, stateString)
+        }
     }
 }
