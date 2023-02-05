@@ -6,6 +6,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
@@ -39,12 +40,19 @@ class MainActivity : AppCompatActivity() {
             .also { exoPlayer ->
                 binding.playerView.player = exoPlayer
 
-                val mediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3))
-                exoPlayer.addMediaItem(mediaItem)
-                val secondMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3_1))
-                exoPlayer.addMediaItem(secondMediaItem)
-                val thirdMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3_2))
-                exoPlayer.addMediaItem(thirdMediaItem)
+//                val mediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3))
+//                exoPlayer.addMediaItem(mediaItem)
+//                val secondMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3_1))
+//                exoPlayer.addMediaItem(secondMediaItem)
+//                val thirdMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3_2))
+//                exoPlayer.addMediaItem(thirdMediaItem)
+
+                val mediaItem = MediaItem.Builder()
+                    .setUri(getString(R.string.media_url_dash))
+                    .setMimeType(MimeTypes.APPLICATION_MPD)
+                    .build()
+
+                exoPlayer.setMediaItem(mediaItem)
 
                 exoPlayer.playWhenReady = playWhenReady
                 exoPlayer.seekTo(currentItem, playBackPosition)
